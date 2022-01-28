@@ -29,17 +29,9 @@
         <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
         <script>
 
-
-
-            function OnInput() {
-            this.style.height = "auto";
-            this.style.height = (this.scrollHeight) + "px";
-            }
-
-
             
 
-            const socket = io("http//chatapp.staging.it-tf.ch")
+            const socket = io("localhost:3003")
             
 
             socket.on("connect", () => {
