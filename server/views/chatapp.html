@@ -1,0 +1,169 @@
+<html>
+    <head>
+        <title>Chattapp</title>
+        <style>
+
+            html,body{
+                text-align: center;
+                height: 100%
+            }
+   
+            #recieveContainer {
+                text-align: center;
+                display: inline-block;
+                width:40%;
+                height:70%;
+                border: 1px solid black;
+                background-color: rgb(200, 222, 230);
+            }
+
+
+            input{
+                width: 20%;
+                height: 5%;
+            }
+
+            
+
+        </style>
+        <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+        <script>
+
+
+
+            function OnInput() {
+            this.style.height = "auto";
+            this.style.height = (this.scrollHeight) + "px";
+            }
+
+
+            
+
+            const socket = io("http//chatapp.staging.it-tf.ch")
+            
+
+            socket.on("connect", () => {
+                console.log(`Your socket ID: ${socket.id}`)
+            })
+
+
+            function joinRoom(){
+                
+                room = document.getElementById("room").value
+                name = document.getElementById("name").value
+                if(name.length < 1 || room.length < 1){
+                    alert("you must enter a room and username to chat.")
+                    return
+                }
+                socket.emit("joinRoom", room, name)
+                alert(`you joined room ${room}`)
+            }
+
+
+
+
+            
+
+            function sendMessage(){
+
+                message = document.getElementById("message").value
+
+                
+                
+                if(room.length<1){
+                    alert("you need to join a room")
+                    return;
+                }
+
+                if(name.length<1){
+                    alert("you need to have a name")
+                    return;
+                }
+
+
+                var para = document.createElement("textarea")
+                para.style.backgroundColor = "lightgreen"
+                para.style.marginRight = "30%"
+                para.style.borderRadius = "10px"
+                para.innerText = message
+
+
+
+                
+                recieveContainer.appendChild(para);
+
+
+
+                
+
+                socket.emit("sendMessage", message, room);
+
+
+
+            }
+
+
+            socket.on("recievedMessage", message => {
+                var para = document.createElement("textarea")
+                para.style.backgroundColor = "white"
+                para.style.marginLeft = "30%"
+                para.style.borderRadius = "10px"
+                para.innerText = name+ ": " +message
+                recieveContainer.appendChild(para);
+
+            })
+
+
+            socket.on("userjoin", name =>{
+                var para = document.createElement("textarea")
+                para.style.backgroundColor = "white"
+                para.style.marginLeft = "30%"
+                para.style.borderRadius = "10px"
+                para.innerText = `User ${name} joinded the chat`
+                recieveContainer.appendChild(para);
+
+            })
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+            
+        </script>
+    </head>
+    <body>
+        <h1>Chatapp</h1>
+
+
+            <div id="recieveContainer">
+
+            </div>
+            
+       
+        <br>
+        <br> <br>
+        <input type="text" id="message"><input type="button" value="send" id="messageButton" onclick="sendMessage()"> <br> <br>
+        <input type="text" id="room" placeholder="room"> <input type="text" id="name" placeholder="username"> <input type="button" value="join room" id="roomButton" onclick="joinRoom()"> <br> <br>
+  
+        
+    
+    </body>
+    <script>
+        var name = ""
+        var message = ""
+        var room = ""
+        var recieveContainer = document.getElementById("recieveContainer")
+    
+
+    </script>    
+</html>
