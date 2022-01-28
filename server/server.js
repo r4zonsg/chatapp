@@ -20,13 +20,13 @@ server.listen(3003, () => {
     console.log("server läuft")
 })
 
-
+var sendname = ""
 io.on("connection", (socket) => {
     console.log(socket.id)
     
-    socket.on("sendMessage", (message, room) => {
-       
-        socket.broadcast.to(room).emit("recievedMessage", message)
+    socket.on("sendMessage", (message, room, name) => {
+        sendname = name;
+        socket.broadcast.to(room).emit("recievedMessage", message, sendname)
 
     })
 
@@ -34,6 +34,7 @@ io.on("connection", (socket) => {
 
 
     socket.on("joinRoom", (room, name) => {
+        sendname = name;
         socket.join(room)
         socket.broadcast.to(room).emit("userjoin", name)
     })

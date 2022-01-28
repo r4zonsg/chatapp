@@ -17,27 +17,20 @@
                 background-color: rgb(200, 222, 230);
             }
 
-
             input{
                 width: 20%;
                 height: 5%;
             }
 
-            
-
         </style>
         <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
         <script>
 
+            const socket = io("http://mychatapp.staging.it-tf.ch")
             
-
-            const socket = io("mychatapp.staging.it-tf.ch")
-            
-
             socket.on("connect", () => {
                 console.log(`Your socket ID: ${socket.id}`)
             })
-
 
             function joinRoom(){
                 
@@ -50,11 +43,6 @@
                 socket.emit("joinRoom", room, name)
                 alert(`you joined room ${room}`)
             }
-
-
-
-
-            
 
             function sendMessage(){
 
@@ -72,90 +60,58 @@
                     return;
                 }
 
-
-                var para = document.createElement("textarea")
+                var para = document.createElement("p")
                 para.style.backgroundColor = "lightgreen"
                 para.style.marginRight = "30%"
                 para.style.borderRadius = "10px"
                 para.innerText = message
 
-
-
-                
                 recieveContainer.appendChild(para);
 
-
-
-                
-
-                socket.emit("sendMessage", message, room);
-
-
+                socket.emit("sendMessage", message, room, name);
 
             }
 
-
-            socket.on("recievedMessage", message => {
-                var para = document.createElement("textarea")
+            socket.on("recievedMessage", (message, sendname) => {
+                var para = document.createElement("p")
                 para.style.backgroundColor = "white"
                 para.style.marginLeft = "30%"
                 para.style.borderRadius = "10px"
-                para.innerText = name+ ": " +message
+                para.innerText = sendname+ ": " +message
                 recieveContainer.appendChild(para);
 
             })
 
 
             socket.on("userjoin", name =>{
-                var para = document.createElement("textarea")
+                var para = document.createElement("p")
                 para.style.backgroundColor = "white"
                 para.style.marginLeft = "30%"
                 para.style.borderRadius = "10px"
-                para.innerText = `User ${name} joined the chat`
+                para.innerText = `${name} joined the chat`
                 recieveContainer.appendChild(para);
 
             })
-
-
-
-
-
-
-
-
-            
-
-
-
-
-
-
-            
         </script>
     </head>
     <body>
         <h1>Chatapp</h1>
-
-
             <div id="recieveContainer">
-
             </div>
-            
-       
-        <br>
         <br> <br>
         <input type="text" id="message"><input type="button" value="send" id="messageButton" onclick="sendMessage()"> <br> <br>
         <input type="text" id="room" placeholder="room"> <input type="text" id="name" placeholder="username"> <input type="button" value="join room" id="roomButton" onclick="joinRoom()"> <br> <br>
-  
-        
-    
     </body>
+    <style>
+            p{
+                padding: 2%;
+                border: 1px solid black;
+            }
+    </style>
     <script>
         var name = ""
         var message = ""
         var room = ""
         var recieveContainer = document.getElementById("recieveContainer")
-    
-
     </script>    
 </html>
