@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 })
 
 
-server.listen(2022, () => {
+server.listen(3002, () => {
     console.log("server läuft")
 })
 
