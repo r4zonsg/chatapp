@@ -31,8 +31,6 @@ io.on("connection", (socket) => {
     })
 
 
-
-
     socket.on("joinRoom", (room, name) => {
         sendname = name;
         socket.join(room)
